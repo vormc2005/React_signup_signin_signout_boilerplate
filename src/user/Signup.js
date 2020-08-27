@@ -2,7 +2,7 @@
 import React, {useState} from 'react';
 import {Link} from 'react-router-dom'
 import Layout from '../core/Layout'
-import { API } from '../config';
+import {signup} from '../auth/index'
 
 
 const Signup= ()=> {
@@ -20,31 +20,12 @@ const Signup= ()=> {
         setValues({...values, error:false, [name]:event.target.value})
     }
     //Sending user unformation to back end, user comes from clickSubmit
-    const signUp =(user)=>{
-        // console.log(user)
-       return fetch(`${API}/signup`, {
-            method: "POST",
-            headers:{
-                Accept:'application/json',
-                "Content-Type": "application/json"
-            },
-            body:JSON.stringify(user)
-            
-        })
-        .then(response =>{
-          
-            return response.json()
-
-        })
-        .catch(err =>{
-            console.log(err)
-        })
-    }
-
+    
+//Submit event, passing values to state
     const clickSubmit = (event)=>{
         event.preventDefault()
         setValues({...values, error: false})
-        signUp({name, email, password})
+        signup({name, email, password})
         .then(data=>{
             if(data.error){
                 setValues({...values, error: data.error, success: false})
@@ -60,13 +41,13 @@ const Signup= ()=> {
             }
         })
     }
-
+//Error message
     const showError = ()=>(
         <div className="alert alert-danger" style={{display:error ? '' : 'none'}}>
             {error}
         </div>
     )
-
+//Success message
     const showSuccess = ()=>(
         <div className="alert alert-info" style={{display: success ? '' : 'none'}}>
             New account is created. Please signin <Link to="signin">Signin</Link>

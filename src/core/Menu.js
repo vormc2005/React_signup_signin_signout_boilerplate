@@ -1,5 +1,6 @@
-import React from 'react'
+import React, {Fragment} from 'react'
 import {Link, withRouter} from 'react-router-dom'
+import {signout, isAuthenticated} from '../auth'
 
 
 //Helper function to change color of the ont on the tabs
@@ -24,7 +25,11 @@ const Menu=({history})=> {
                             Home
                     </Link>
                </li>
-               <li className="nav-item">
+
+                {!isAuthenticated() && (
+
+                    <Fragment>
+                    <li className="nav-item">
                    <Link
                          className="nav-link" 
                          to="/signin" 
@@ -42,6 +47,25 @@ const Menu=({history})=> {
                              Signup
                     </Link>
                </li>
+                    </Fragment>
+                )
+                }
+              {isAuthenticated() && (
+                   <li className="nav-item">
+                   <span
+                         className="nav-link" 
+                         to="/signout" 
+                         style={{cursor: 'pointer', color: '#ffffff'}}
+                         onClick={()=>signout(()=>{
+                             history.push('/')
+                         })}
+                         >  
+                             Signout
+                    </span>
+               </li>
+              )}
+
+        
                </ul> 
         </div>
     )
